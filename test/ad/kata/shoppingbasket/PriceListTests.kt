@@ -2,10 +2,11 @@ package ad.kata.shoppingbasket
 
 import ad.kata.shoppingbasket.products.Sku
 import ad.kata.shoppingbasket.sales.Euros
-import ad.kata.shoppingbasket.sales.ItemForSale
+import ad.kata.shoppingbasket.sales.NoPrice
+import ad.kata.shoppingbasket.sales.PriceList
+import ad.kata.shoppingbasket.sales.PricedItem
 import ad.kata.shoppingbasket.sales.emptyPriceList
-import ad.kata.shoppingbasket.sales.priceForOrThrow
-import ad.kata.shoppingbasket.sales.priceListFor
+import ad.kata.shoppingbasket.sales.tryPriceItem
 import org.junit.jupiter.api.Test
 import strikt.api.expectThat
 import strikt.api.expectThrows
@@ -17,7 +18,7 @@ class PriceListTests {
     @Test
     fun `returns a price for known item`() {
         expectThat(
-            priceListFor(ItemForSale(Sku("1"), price = Euros(2.5)))
+            PriceList(Sku("1") to Euros(2.5))
         ) {
             get { priceFor(Sku("1")) }.isEqualTo(Euros(2.5))
         }
@@ -26,16 +27,36 @@ class PriceListTests {
     @Test
     fun `returns nothing for unknown items`() {
         expectThat(
-            priceListFor(ItemForSale(Sku("1"), price = Euros(2.5)))
+            PriceList(Sku("1") to Euros(2.5))
         ) {
             get { priceFor(Sku("2")) }.isNull()
         }
     }
 
     @Test
-    fun `can throw for unknown items with convenience function`() {
-        expectThrows<Exception> {
-            emptyPriceList().priceForOrThrow(Sku("2"))
+    fun `can price an item (sku + quantity)`() {
+        expectThat(
+            PriceList(Sku("1") to Euros(2.5))
+        ) {
+            get { tryPriceItem(Sku("1"), Quantity(2)) }.isEqualTo(
+                PricedItem(Sku("1"), skuPrice = Euros(2.5), Quantity(2))
+            )
+        }
+    }
+
+    @Test
+    fun `priced items have an item total`() {
+        expectThat(
+            PricedItem(Sku("1"), skuPrice = Euros(2.5), Quantity(2))
+        ) {
+            get { itemTotal }.isEqualTo(Euros(5.0))
+        }
+    }
+
+    @Test
+    fun `throw then pricing an item fails`() {
+        expectThrows<NoPrice> {
+            emptyPriceList().tryPriceItem(Sku("2"))
         }
     }
 }

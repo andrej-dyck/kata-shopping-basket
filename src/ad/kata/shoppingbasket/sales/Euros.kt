@@ -19,5 +19,7 @@ operator fun Euros.times(factor: Int) =
 operator fun Euros.times(factor: Double) =
     Euros(cents = round(cents * factor).toLong())
 
-fun Collection<Euros>.sum() =
-    Euros(cents = sumOf { it.cents })
+inline fun <T> Iterable<T>.sumOf(selector: (T) -> Euros): Euros =
+    // 🤯 as Euros is compiled to Long, the extension method sumOf(selector: (T) -> Long)
+    // has the same signature, and thus, cannot be used here
+    Euros(cents = fold(0) { cents, e -> cents + selector(e).cents })

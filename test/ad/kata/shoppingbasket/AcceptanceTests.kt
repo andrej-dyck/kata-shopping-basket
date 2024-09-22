@@ -3,10 +3,9 @@ package ad.kata.shoppingbasket
 import ad.kata.shoppingbasket.products.Sku
 import ad.kata.shoppingbasket.sales.Buy1Get1Free
 import ad.kata.shoppingbasket.sales.Euros
-import ad.kata.shoppingbasket.sales.ItemForSale
 import ad.kata.shoppingbasket.sales.Percent
 import ad.kata.shoppingbasket.sales.PercentOff
-import ad.kata.shoppingbasket.sales.priceListFor
+import ad.kata.shoppingbasket.sales.PriceList
 import org.junit.jupiter.api.Test
 import strikt.api.expectThat
 import strikt.assertions.isEqualTo
@@ -17,9 +16,9 @@ class AcceptanceTests {
     @Test
     @Ignore
     fun `10 percent off deal`() {
-        val priceList = priceListFor(
-            ItemForSale(Sku("A0001"), price = Euros(12.99)),
-            ItemForSale(Sku("A0002"), price = Euros(3.99))
+        val priceList = PriceList(
+            Sku("A0001") to Euros(12.99),
+            Sku("A0002") to Euros(3.99)
         )
         // deals
         listOf(
@@ -39,9 +38,9 @@ class AcceptanceTests {
     @Test
     @Ignore
     fun `buy 1 get 1 free`() {
-        val priceList = priceListFor(
-            ItemForSale(Sku("A0001"), price = Euros(12.99)),
-            ItemForSale(Sku("A0002"), price = Euros(3.99))
+        val priceList = PriceList(
+            Sku("A0001") to Euros(12.99),
+            Sku("A0002") to Euros(3.99)
         )
         // deals
         listOf(
@@ -61,9 +60,9 @@ class AcceptanceTests {
     @Test
     @Ignore
     fun `multiple deals`() {
-        val priceList = priceListFor(
-            ItemForSale(Sku("A0001"), price = Euros(12.99)),
-            ItemForSale(Sku("A0002"), price = Euros(3.99))
+        val priceList = PriceList(
+            Sku("A0001") to Euros(12.99),
+            Sku("A0002") to Euros(3.99)
         )
         // deals
         listOf(

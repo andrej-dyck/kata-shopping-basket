@@ -1,6 +1,10 @@
 package ad.kata.shoppingbasket
 
 import ad.kata.shoppingbasket.products.Sku
+import ad.kata.shoppingbasket.sales.Euros
+import ad.kata.shoppingbasket.sales.PriceList
+import ad.kata.shoppingbasket.sales.sumOf
+import ad.kata.shoppingbasket.sales.tryPriceItem
 
 class Basket(
     private val items: Map<Sku, Quantity> = emptyMap()
@@ -15,17 +19,8 @@ class Basket(
 
 data class BasketItem(val sku: Sku, val quantity: Quantity = Quantity(1))
 
-@JvmInline
-value class Quantity(val units: Int) {
-    init {
-        require(units >= 0) { "Amount must not be negative" }
-        // 💡 an upper limit could also be interesting
-    }
-}
-
-operator fun Quantity.plus(quantity: Quantity) =
-    // 💡 add custom overflow exception with unit < Int.MAX_VALUE - quantity.units
-    Quantity(units + quantity.units)
-
-operator fun Quantity.compareTo(quantity: Int) =
-    units.compareTo(quantity)
+// total
+fun Basket.total(priceList: PriceList): Euros =
+    basketItems()
+        .map { priceList.tryPriceItem(it.sku, it.quantity) }
+        .sumOf { it.itemTotal }

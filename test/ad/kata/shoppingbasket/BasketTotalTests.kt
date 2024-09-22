@@ -2,9 +2,8 @@ package ad.kata.shoppingbasket
 
 import ad.kata.shoppingbasket.products.Sku
 import ad.kata.shoppingbasket.sales.Euros
-import ad.kata.shoppingbasket.sales.ItemForSale
+import ad.kata.shoppingbasket.sales.PriceList
 import ad.kata.shoppingbasket.sales.emptyPriceList
-import ad.kata.shoppingbasket.sales.priceListFor
 import org.junit.jupiter.api.Test
 import strikt.api.expectThat
 import strikt.api.expectThrows
@@ -23,8 +22,8 @@ class BasketTotalTests {
 
     @Test
     fun `total looks up prices for items`() {
-        val priceList = priceListFor(
-            ItemForSale(Sku("1"), price = Euros(2.5))
+        val priceList = PriceList(
+            Sku("1") to Euros(2.5)
         )
 
         expectThat(
@@ -36,8 +35,8 @@ class BasketTotalTests {
 
     @Test
     fun `item price is listing price times amount`() {
-        val priceList = priceListFor(
-            ItemForSale(Sku("1"), price = Euros(2.5))
+        val priceList = PriceList(
+            Sku("1") to Euros(2.5)
         )
 
         expectThat(
@@ -49,9 +48,9 @@ class BasketTotalTests {
 
     @Test
     fun `total sums up all priced items`() {
-        val priceList = priceListFor(
-            ItemForSale(Sku("1"), price = Euros(0.3)),
-            ItemForSale(Sku("2"), price = Euros(0.2))
+        val priceList = PriceList(
+            Sku("1") to Euros(0.3),
+            Sku("2") to Euros(0.2)
         )
 
         expectThat(
