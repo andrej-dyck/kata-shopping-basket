@@ -10,6 +10,9 @@ value class Euros(val cents: Long) {
     override fun toString() = "${cents / 100.0} €"
 }
 
+operator fun Euros.plus(euros: Euros) =
+    Euros(cents = cents + euros.cents)
+
 operator fun Euros.times(factor: Int) =
     Euros(cents = cents * factor)
 

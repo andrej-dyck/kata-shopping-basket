@@ -33,3 +33,21 @@ private fun Collection<PricedItem>.reduceToSingleItem(sku: Sku): PricedItem? =
             require(item1.skuPrice == item2.skuPrice)
             PricedItem(sku, item1.skuPrice, quantity = item1.quantity + item2.quantity)
         }
+
+class PercentOff(private val sku: Sku, private val percent: Percent) : Deal {
+
+    override fun discountFor(items: Collection<PricedItem>): Discount? =
+        items.filter { it.sku == sku }
+            .map { Discount(sku, discountInEuros = it.skuPrice * it.quantity.units * percent.toFraction()) }
+            .ifEmpty { null }
+            ?.reduce { d1, d2 -> Discount(sku, discountInEuros = d1.discountInEuros + d2.discountInEuros) }
+}
+
+@JvmInline
+value class Percent(val value: Int) {
+    init {
+        require(value in (0..100)) { "Percentage must be in between 0% and 100%; was $value" }
+    }
+}
+
+fun Percent.toFraction() = value / 100.0
