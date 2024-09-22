@@ -1,8 +1,11 @@
 package ad.kata.shoppingbasket
 
 import ad.kata.shoppingbasket.products.Sku
+import ad.kata.shoppingbasket.sales.Buy1Get1Free
 import ad.kata.shoppingbasket.sales.Euros
 import ad.kata.shoppingbasket.sales.PriceList
+import ad.kata.shoppingbasket.sales.Percent
+import ad.kata.shoppingbasket.sales.PercentOff
 import ad.kata.shoppingbasket.sales.emptyPriceList
 import org.junit.jupiter.api.Test
 import strikt.api.expectThat
@@ -64,6 +67,42 @@ class BasketTotalTests {
     fun `total throws when no price is found`() {
         expectThrows<Exception> {
             Basket().withItem(Sku("1")).total(emptyPriceList())
+        }
+    }
+
+    @Test
+    fun `total applies given deal`() {
+        val priceList = PriceList(
+            Sku("1") to Euros(2.5)
+        )
+        val deals = listOf(
+            PercentOff(Sku("1"), Percent(10))
+        )
+
+        expectThat(
+            Basket().withItem(Sku("1"), Quantity(2))
+        ) {
+            get { total(priceList, deals) }.isEqualTo(Euros(4.5))
+        }
+    }
+
+    @Test
+    fun `total applies given multiple deals`() {
+        val priceList = PriceList(
+            Sku("1") to Euros(2.5),
+            Sku("2") to Euros(4.2)
+        )
+        val deals = listOf(
+            PercentOff(Sku("1"), Percent(10)),
+            Buy1Get1Free(Sku("2"))
+        )
+
+        expectThat(
+            Basket()
+                .withItem(Sku("1"), Quantity(2))
+                .withItem(Sku("2"), Quantity(2))
+        ) {
+            get { total(priceList, deals) }.isEqualTo(Euros(8.7))
         }
     }
 }

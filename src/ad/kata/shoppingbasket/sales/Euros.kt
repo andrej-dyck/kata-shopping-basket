@@ -13,6 +13,9 @@ value class Euros(val cents: Long) {
 operator fun Euros.plus(euros: Euros) =
     Euros(cents = cents + euros.cents)
 
+operator fun Euros.minus(euros: Euros) =
+    Euros(cents = cents - euros.cents)
+
 operator fun Euros.times(factor: Int) =
     Euros(cents = cents * factor)
 

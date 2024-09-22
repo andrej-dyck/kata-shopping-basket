@@ -9,19 +9,16 @@ import ad.kata.shoppingbasket.sales.PriceList
 import org.junit.jupiter.api.Test
 import strikt.api.expectThat
 import strikt.assertions.isEqualTo
-import kotlin.test.Ignore
 
 class AcceptanceTests {
 
     @Test
-    @Ignore
     fun `10 percent off deal`() {
         val priceList = PriceList(
             Sku("A0001") to Euros(12.99),
             Sku("A0002") to Euros(3.99)
         )
-        // deals
-        listOf(
+        val deals = listOf(
             PercentOff(Sku("A0001"), Percent(10)),
         )
 
@@ -31,19 +28,17 @@ class AcceptanceTests {
                 .withItem(Sku("A0001"))
                 .withItem(Sku("A0002"))
         ) {
-            get { total(priceList) }.isEqualTo(Euros(19.67))
+            get { total(priceList, deals) }.isEqualTo(Euros(19.67))
         }
     }
 
     @Test
-    @Ignore
     fun `buy 1 get 1 free`() {
         val priceList = PriceList(
             Sku("A0001") to Euros(12.99),
             Sku("A0002") to Euros(3.99)
         )
-        // deals
-        listOf(
+        val deals = listOf(
             Buy1Get1Free(Sku("A0002")),
         )
 
@@ -53,19 +48,17 @@ class AcceptanceTests {
                 .withItem(Sku("A0001"))
                 .withItem(Sku("A0002"))
         ) {
-            get { total(priceList) }.isEqualTo(Euros(16.98))
+            get { total(priceList, deals) }.isEqualTo(Euros(16.98))
         }
     }
 
     @Test
-    @Ignore
     fun `multiple deals`() {
         val priceList = PriceList(
             Sku("A0001") to Euros(12.99),
             Sku("A0002") to Euros(3.99)
         )
-        // deals
-        listOf(
+        val deals = listOf(
             PercentOff(Sku("A0001"), Percent(10)),
             Buy1Get1Free(Sku("A0002")),
         )
@@ -76,7 +69,7 @@ class AcceptanceTests {
                 .withItem(Sku("A0001"))
                 .withItem(Sku("A0002"))
         ) {
-            get { total(priceList) }.isEqualTo(Euros(15.68))
+            get { total(priceList, deals) }.isEqualTo(Euros(15.68))
         }
     }
 }
