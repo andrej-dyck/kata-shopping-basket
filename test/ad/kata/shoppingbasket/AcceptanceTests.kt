@@ -6,6 +6,7 @@ import ad.kata.shoppingbasket.sales.ItemForSale
 import ad.kata.shoppingbasket.sales.priceListFor
 import org.junit.jupiter.api.Test
 import strikt.api.expectThat
+import strikt.assertions.isEqualTo
 import kotlin.test.Ignore
 
 class AcceptanceTests {
@@ -13,7 +14,7 @@ class AcceptanceTests {
     @Test
     @Ignore
     fun `10 percent off deal`() {
-        priceListFor(
+        val priceList = priceListFor(
             ItemForSale(Sku("A0001"), price = Euros(12.99)),
             ItemForSale(Sku("A0002"), price = Euros(3.99))
         )
@@ -24,15 +25,15 @@ class AcceptanceTests {
                 .withItem(Sku("A0002"))
                 .withItem(Sku("A0001"))
                 .withItem(Sku("A0002"))
-        )
-        // basket.total
-        // => 19.67
+        ) {
+            get { total(priceList) }.isEqualTo(Euros(19.67))
+        }
     }
 
     @Test
     @Ignore
     fun `buy 1 get 1 free`() {
-        priceListFor(
+        val priceList = priceListFor(
             ItemForSale(Sku("A0001"), price = Euros(12.99)),
             ItemForSale(Sku("A0002"), price = Euros(3.99))
         )
@@ -43,15 +44,15 @@ class AcceptanceTests {
                 .withItem(Sku("A0002"))
                 .withItem(Sku("A0001"))
                 .withItem(Sku("A0002"))
-        )
-        // basket.total
-        // => 16.98
+        ) {
+            get { total(priceList) }.isEqualTo(Euros(16.98))
+        }
     }
 
     @Test
     @Ignore
     fun `multiple deals`() {
-        priceListFor(
+        val priceList = priceListFor(
             ItemForSale(Sku("A0001"), price = Euros(12.99)),
             ItemForSale(Sku("A0002"), price = Euros(3.99))
         )
@@ -63,8 +64,8 @@ class AcceptanceTests {
                 .withItem(Sku("A0002"))
                 .withItem(Sku("A0001"))
                 .withItem(Sku("A0002"))
-        )
-        // basket.total
-        // => 15.68
+        ) {
+            get { total(priceList) }.isEqualTo(Euros(15.68))
+        }
     }
 }

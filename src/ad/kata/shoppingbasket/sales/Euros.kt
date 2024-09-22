@@ -9,3 +9,12 @@ value class Euros(val cents: Long) {
 
     override fun toString() = "${cents / 100.0} €"
 }
+
+operator fun Euros.times(factor: Int) =
+    Euros(cents = cents * factor)
+
+operator fun Euros.times(factor: Double) =
+    Euros(cents = round(cents * factor).toLong())
+
+fun Collection<Euros>.sum() =
+    Euros(cents = sumOf { it.cents })
