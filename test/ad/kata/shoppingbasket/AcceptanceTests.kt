@@ -1,6 +1,7 @@
 package ad.kata.shoppingbasket
 
 import ad.kata.shoppingbasket.products.Sku
+import ad.kata.shoppingbasket.sales.Buy1Get1Free
 import ad.kata.shoppingbasket.sales.Euros
 import ad.kata.shoppingbasket.sales.ItemForSale
 import ad.kata.shoppingbasket.sales.priceListFor
@@ -37,7 +38,10 @@ class AcceptanceTests {
             ItemForSale(Sku("A0001"), price = Euros(12.99)),
             ItemForSale(Sku("A0002"), price = Euros(3.99))
         )
-        // deals Buy1Get1Free for A0002
+        // deals
+        listOf(
+            Buy1Get1Free(Sku("A0002")),
+        )
 
         expectThat(
             Basket()
@@ -56,8 +60,11 @@ class AcceptanceTests {
             ItemForSale(Sku("A0001"), price = Euros(12.99)),
             ItemForSale(Sku("A0002"), price = Euros(3.99))
         )
-        // deals 10% off for A0001
-        // deals Buy1Get1Free for A0002
+        // deals
+        listOf(
+            // deals 10% off for A0001
+            Buy1Get1Free(Sku("A0002")),
+        )
 
         expectThat(
             Basket()

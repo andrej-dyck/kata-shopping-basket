@@ -26,3 +26,6 @@ value class Quantity(val units: Int) {
 operator fun Quantity.plus(quantity: Quantity) =
     // 💡 add custom overflow exception with unit < Int.MAX_VALUE - quantity.units
     Quantity(units + quantity.units)
+
+operator fun Quantity.compareTo(quantity: Int) =
+    units.compareTo(quantity)
