@@ -1,6 +1,8 @@
 package ad.kata.shoppingbasket
 
+import ad.kata.shoppingbasket.products.Sku
 import org.junit.jupiter.api.Test
+import strikt.api.expectThat
 import kotlin.test.Ignore
 
 class AcceptanceTests {
@@ -11,10 +13,12 @@ class AcceptanceTests {
         // price list [["A0001", 12.99], ["A0002", 3.99], ...]
         // deals 10% off for A0001
 
-        // basket = Basket.new
-        // basket.scan("A0002")
-        // basket.scan("A0001")
-        // basket.scan("A0002")
+        expectThat(
+            Basket()
+                .withItem(Sku("A0002"))
+                .withItem(Sku("A0001"))
+                .withItem(Sku("A0002"))
+        )
         // basket.total
         // => 19.67
     }
@@ -25,10 +29,12 @@ class AcceptanceTests {
         // price list [["A0001", 12.99], ["A0002", 3.99], ...]
         // deals Buy1Get1Free for A0002
 
-        // basket = Basket.new
-        // basket.scan("A0002")
-        // basket.scan("A0001")
-        // basket.scan("A0002")
+        expectThat(
+            Basket()
+                .withItem(Sku("A0002"))
+                .withItem(Sku("A0001"))
+                .withItem(Sku("A0002"))
+        )
         // basket.total
         // => 16.98
     }
@@ -40,10 +46,12 @@ class AcceptanceTests {
         // deals 10% off for A0001
         // deals Buy1Get1Free for A0002
 
-        // basket = Basket.new
-        // basket.scan("A0002")
-        // basket.scan("A0001")
-        // basket.scan("A0002")
+        expectThat(
+            Basket()
+                .withItem(Sku("A0002"))
+                .withItem(Sku("A0001"))
+                .withItem(Sku("A0002"))
+        )
         // basket.total
         // => 15.68
     }
